@@ -1,0 +1,25 @@
+﻿@model WebJobsDemo.Sample.Order
+@{
+    ViewBag.Title = "Order";
+}
+
+<h2>Order</h2>
+<hr />
+@if (Model == null)
+{
+    <form action="placeorder" method="post">
+        <button class="btn btn-primary" type="submit">Place Order (Sync)</button>
+    </form>
+    <br />
+    <form action="placeorderasync" method="post">
+        <button class="btn btn-primary" type="submit">Place Order (Async)</button>
+    </form>
+}
+else
+{
+    <h3>Your order has been submitted (@Model.Id).</h3>
+    <div>Time taken: @string.Format("{0}ms", ViewBag.TimeTaken)</div>
+
+    <p><a href="~/home/order">Back</a></p>
+}
+

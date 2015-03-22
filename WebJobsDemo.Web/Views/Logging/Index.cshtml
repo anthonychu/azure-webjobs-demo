@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>WebJobs Logging Demo</h2>
+
+<button id="error-button" class="btn btn-danger">Generate an Error</button>
+<button id="warning-button" class="btn btn-warning">Generate a Warning</button>
+
+<hr />
+
+<div class="row">
+    @*<div class="col-xs-6">
+        Current Alerts<br />
+        <div class="alert-status alert-ok">OK</div>
+        <div class="alert-status alert-warning">WARNING</div>
+        <div class="alert-status alert-danger">DANGER</div>
+    </div>*@
+    <div class="col-xs-6">
+        <table>
+            <tr>
+                <td>Warning:</td>
+                <td id="warnings-cell"></td>
+            </tr>
+            <tr>
+                <td>Errors:</td>
+                <td id="errors-cell"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-xs-12">
+        <canvas id="chart" width="600" height="100"></canvas>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script src="~/Scripts/smoothie.js"></script>
+
+    <script>
+        (function () {
+            var errorLine = new TimeSeries();
+            var warningLine = new TimeSeries();
+
+            $(function () {
+                var loggingHubProxy = $.connection.loggingHub;
+                loggingHubProxy.client.onError = function (message) {
+                    alertify.error(message);
+                };
+                loggingHubProxy.client.onSummaryUpdate = function (summary) {
+                    showSummary(summary);
+                };
+                loggingHubProxy.client.onAlertLevelUpdate = function (status) {
+                    showStatus(status);
+                };
+                loggingHubProxy.client.onRunningCounts = function (summary) {
+                    errorLine.append(new Date().getTime(), summary.ErrorCount);
+                    warningLine.append(new Date().getTime(), summary.WarningCount);
+                };
+
+                $.connection.hub.start();
+
+                $('#error-button').click(function () {
+                    loggingHubProxy.server.addError();
+                });
+                $('#warning-button').click(function () {
+                    loggingHubProxy.server.addWarning();
+                });
+
+                var smoothie = new SmoothieChart();
+                smoothie.streamTo(document.getElementById("chart"), 1000);
+                smoothie.addTimeSeries(errorLine, { strokeStyle: 'rgb(192, 0, 0)', fillStyle: 'rgba(192, 0, 0, 0.4)', lineWidth: 3 });
+                smoothie.addTimeSeries(warningLine, { strokeStyle: 'rgb(192, 128, 0)', fillStyle: 'rgba(192, 128, 0, 0.4)', lineWidth: 3 });
+
+            });
+
+            function showStatus(status) {
+            //    $(".alert-status").hide();
+            //    if (status === "LOW") {
+            //        $(".alert-ok").show();
+            //    } else if (status === "MODERATE") {
+            //        $(".alert-warning").show();
+            //    } else {
+            //        $(".alert-danger").show();
+                //    }
+
+                if (status === "HIGH") {
+                    alertify.log("Currently experiencing a high number of warnings");
+                } else {
+                    alertify.success("Number of warnings have returned to an acceptable level");
+                }
+            }
+
+            function showSummary(summary) {
+                $("#errors-cell").text(summary.ErrorCount || 0);
+                $("#warnings-cell").text(summary.WarningCount || 0);
+            }
+
+        }());
+    </script>
+}
