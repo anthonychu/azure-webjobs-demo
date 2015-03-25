@@ -6,6 +6,9 @@
     },
     {
       "filePath": "../WebJobsDemo.RxLogging/WebJobsDemo.RxLogging.csproj"
+    },
+    {
+      "filePath": "../WebJobsDemo.OnDemand/WebJobsDemo.OnDemand.csproj"
     }
   ]
 }

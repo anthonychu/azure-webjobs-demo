@@ -10,7 +10,7 @@ namespace WebJobsDemo.RxLogging
 {
     class Program
     {
-        public static EventProcessor EventProcessor = new EventProcessor();
+        public static EventNotificationHub EventNotificationHub = new EventNotificationHub();
 
         static void Main()
         {

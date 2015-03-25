@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using WebJobsDemo.Sample;
+using System.Web.Helpers;
+using System.Diagnostics;
 
 namespace WebJobsDemo.SampleJobs
 {
@@ -30,6 +32,13 @@ namespace WebJobsDemo.SampleJobs
             await emailService.Send(emailMessage);
 
             logger.WriteLine("Sent email: {0}", emailMessage.Subject);
+        }
+
+        public static void GenerateThumbnail(
+            [BlobTrigger("imageblobs-original/{filename}.{ext}")] WebImage originalImage,
+            [Blob("imageblobs-resized/{filename}-small.{ext}")] out WebImage resizedImage)
+        {
+            resizedImage = originalImage.Resize(96, 96, true, true);
         }
     }
 }

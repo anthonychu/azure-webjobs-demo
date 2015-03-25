@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,9 +24,10 @@ namespace WebJobsDemo.Sample
         }
 
 
-        private Task ProcessOrder(Order order)
+        private async Task ProcessOrder(Order order)
         {
-            return Task.Delay(3000);
+            await Task.Delay(3000);
+            Trace.TraceInformation("Processed order: {0}", order.Id);
         }
 
         private async Task SendOrderProcessedEmail(Order order)
@@ -38,6 +40,7 @@ namespace WebJobsDemo.Sample
             };
 
             await _emailService.Send(message);
+            Trace.TraceInformation("Send email to: {0}", message.ToEmail);
         }
     }
 }

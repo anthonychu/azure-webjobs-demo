@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace WebJobsDemo.RxLogging.Core
 {
-    public class EventProcessor
+    public class EventNotificationHub
     {
         Subject<LogEvent> allLogEventsSubject = new Subject<LogEvent>();
         LogNotifier notifier = new LogNotifier();
 
-        public EventProcessor()
+        public EventNotificationHub()
         {
             SetUpSubscriptions();
         }
