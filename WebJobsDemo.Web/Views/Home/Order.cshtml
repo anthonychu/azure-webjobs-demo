@@ -9,10 +9,12 @@
 {
     <form action="placeorder" method="post">
         <button class="btn btn-primary" type="submit">Place Order (Sync)</button>
+        <span></span>
     </form>
     <br />
     <form action="placeorderasync" method="post">
         <button class="btn btn-primary" type="submit">Place Order (Async)</button>
+        <span></span>
     </form>
 }
 else
@@ -23,3 +25,12 @@ else
     <p><a href="~/home/order">Back</a></p>
 }
 
+@section Scripts {
+    <script>
+        $(function () {
+            $('button').click(function () {
+                $(this).next().text("Please wait...");
+            });
+        });
+    </script>
+}

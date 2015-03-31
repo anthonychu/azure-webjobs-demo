@@ -16,7 +16,7 @@ namespace WebJobsDemo.RxLogging
             [QueueTrigger("logerrors")] string message,
             [Table("logevents")] ICollector<LogEventEntity> logEventsTable)
         {
-            logEventsTable.Add(new LogEventEntity { EventType = "Warning", Message = message });
+            logEventsTable.Add(new LogEventEntity { EventType = "Error", Message = message });
             Program.EventNotificationHub.AddEvent(new ErrorLogEvent { Message = message });
         }
 
@@ -24,7 +24,7 @@ namespace WebJobsDemo.RxLogging
             [QueueTrigger("logwarnings")] string message,
             [Table("logevents")] ICollector<LogEventEntity> logEventsTable)
         {
-            logEventsTable.Add(new LogEventEntity { EventType = "Error", Message = message });
+            logEventsTable.Add(new LogEventEntity { EventType = "Warning", Message = message });
             Program.EventNotificationHub.AddEvent(new WarningLogEvent { Message = message });
         }
     }

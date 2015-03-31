@@ -26,7 +26,7 @@ namespace WebJobsDemo.RxLogging.Core
             errorEvents.Subscribe(e => notifier.SendError(e.Message));
 
             var eventBuffers = allEvents
-                                    .Buffer(TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(1));
+                                    .Buffer(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(500));
 
             var bufferedEventCounts = eventBuffers
                                             .Select(b => new LogEventsSummary
@@ -57,7 +57,7 @@ namespace WebJobsDemo.RxLogging.Core
                                                 p.WarningCount += 1;
                                             return p;
                                         })
-                                        .Sample(TimeSpan.FromMilliseconds(500));
+                                        .Sample(TimeSpan.FromSeconds(1));
             logEventSummaries.Subscribe(s => notifier.UpdateSummary(s));
         }
 

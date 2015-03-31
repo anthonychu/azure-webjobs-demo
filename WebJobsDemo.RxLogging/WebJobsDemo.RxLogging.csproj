@@ -88,7 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\ErrorLogEvent.cs" />
-    <Compile Include="Core\EventProcessor.cs" />
+    <Compile Include="Core\EventNotificationHub.cs" />
     <Compile Include="Core\LogEvent.cs" />
     <Compile Include="Core\LogNotifier.cs" />
     <Compile Include="Core\LogSummary.cs" />
